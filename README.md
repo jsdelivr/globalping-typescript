@@ -20,6 +20,8 @@ It also exports values for all `enum` parameters as JS objects, which can be use
 
 ### Quick start
 
+Using the package in ESM/CJS applications:
+
 ```ts
 import { Globalping } from 'globalping';
 
@@ -27,6 +29,13 @@ const globalping = new Globalping({
     auth: 'your-globalping-api-token', // Optional.
     // See the Advanced configuration section below for more options.
 });
+```
+
+Using the UMD build:
+
+```ts
+const { Globalping } = window.globalping;
+const globalping = new Globalping(/* options */);
 ```
 
 ### Create a measurement
