@@ -20,6 +20,10 @@
 	},
 	"jsdelivr": "./dist/umd/bundle.min.js",
 	"types": "./dist/esm/index.d.ts",
+	"files": [
+		"dist",
+		"src"
+	],
 	"dependencies": {
 		"@hey-api/client-fetch": "^0.10.0"
 	},
