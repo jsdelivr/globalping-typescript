@@ -1,0 +1,28 @@
+{
+	"extends": "@tsconfig/strictest/tsconfig",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./dist/esm",
+		"lib": [
+			"ES2019"
+		],
+		"module": "NodeNext",
+		"target": "ES2019",
+		"moduleResolution": "NodeNext",
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"noPropertyAccessFromIndexSignature": false,
+		"plugins": [
+			{
+				"transform": "typescript-transform-paths"
+			}
+		]
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"dist",
+		"node_modules"
+	]
+}

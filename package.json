@@ -1,0 +1,60 @@
+{
+	"name": "globalping",
+	"version": "0.1.0",
+	"license": "MIT",
+	"description": "The official TS/JS client for the Globalping API",
+	"keywords": [
+		"globalping",
+		"ping",
+		"traceroute",
+		"dns",
+		"mtr",
+		"http"
+	],
+	"type": "module",
+	"exports": {
+		"types": "./dist/esm/index.d.ts",
+		"import": "./dist/esm/index.js",
+		"require": "./dist/cjs/bundle.cjs",
+		"default": "./dist/umd/bundle.js"
+	},
+	"jsdelivr": "./dist/umd/bundle.min.js",
+	"dependencies": {
+		"@hey-api/client-fetch": "^0.10.0"
+	},
+	"devDependencies": {
+		"@hey-api/openapi-ts": "^0.67.2",
+		"@martin-kolarik/eslint-config": "^7.3.2",
+		"@rollup/plugin-json": "^6.1.0",
+		"@rollup/plugin-node-resolve": "^16.0.1",
+		"@tsconfig/strictest": "^2.0.5",
+		"@types/chai": "^5.2.2",
+		"@types/jsdom": "^21.1.7",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^22.15.15",
+		"@typescript-eslint/eslint-plugin": "^8.32.0",
+		"chai": "^5.2.0",
+		"eslint": "^8.57.1",
+		"fetch-mock": "^12.5.2",
+		"jsdom": "^26.1.0",
+		"mocha": "^11.2.2",
+		"rollup": "^4.40.2",
+		"terser": "^5.39.0",
+		"ts-node": "^10.9.2",
+		"ts-patch": "^3.3.0",
+		"typescript": "^5.8.3",
+		"typescript-transform-paths": "^3.5.5"
+	},
+	"scripts": {
+		"build": "rm -rf dist && npm run build:esm && npm run build:umd",
+		"build:esm": "tspc --declaration",
+		"build:umd": "rollup -c && terser dist/umd/bundle.js -o dist/umd/bundle.min.js --source-map 'content=dist/umd/bundle.js.map,url=bundle.min.js.map'",
+		"lint": "eslint --cache .",
+		"lint:fix": "eslint --cache --fix .",
+		"openapi:generate": "openapi-ts && eslint src/openapi-ts --fix",
+		"test:dist": "node test/dist.js",
+		"test:e2e": "TS_NODE_TRANSPILE_ONLY=true mocha --config .mocharc.e2e.cjs",
+		"test:integration": "TS_NODE_TRANSPILE_ONLY=true mocha",
+		"test": "npm run lint && npm run test:integration"
+	}
+}

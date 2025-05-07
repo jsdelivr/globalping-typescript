@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: test
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+      - name: Test
+        run: |
+          npm test
+      - name: Test Dist
+        run: |
+          rm -rf node_modules
+          npm ci --omit=dev
+          npm run test:dist
