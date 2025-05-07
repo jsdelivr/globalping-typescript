@@ -19,6 +19,7 @@
 		"default": "./dist/umd/bundle.js"
 	},
 	"jsdelivr": "./dist/umd/bundle.min.js",
+	"types": "./dist/esm/index.d.ts",
 	"dependencies": {
 		"@hey-api/client-fetch": "^0.10.0"
 	},
