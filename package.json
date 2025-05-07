@@ -1,6 +1,6 @@
 {
 	"name": "globalping",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"license": "MIT",
 	"description": "The official TS/JS client for the Globalping API",
 	"keywords": [
