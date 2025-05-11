@@ -89,9 +89,14 @@ export class Globalping<ThrowApiErrors extends boolean> {
 			});
 		};
 
+		const start = Date.now();
 		let internalResult = await getMeasurement();
 
 		while (internalResult.data && internalResult.data.status === MeasurementStatus.IN_PROGRESS) {
+			if (Date.now() - start > 60000) {
+				throw new Error(`Timed out waiting for measurement ${id} to finish.`);
+			}
+
 			await wait(500);
 			const newInternalResult = await getMeasurement(internalResult.response.headers.get('ETag'));
 
