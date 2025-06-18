@@ -36,7 +36,7 @@ type GlobalpingRequestOptions = {
 	userAgent?: string;
 	signal?: AbortSignal;
 	timeout?: number;
-}
+};
 
 export class Globalping<ThrowApiErrors extends boolean> {
 	private readonly auth: string | undefined;
@@ -131,8 +131,8 @@ export class Globalping<ThrowApiErrors extends boolean> {
 		return this.transformResult<GetLimitsResponses, NoResponseTypes>(this.request(sdk.getLimits));
 	}
 
-	private request <RSD, RSE> (fn: () => RequestResult<RSD, RSE, false>): RequestResult<RSD, RSE, false>;
-	private request <RSD, RSE, RQ extends TDataShape, O extends sdk.Options<RQ, false>> (fn: (options: O) => RequestResult<RSD, RSE, false>, options?: O & GlobalpingRequestOptions): RequestResult<RSD, RSE, false>;
+	private request<RSD, RSE> (fn: () => RequestResult<RSD, RSE, false>): RequestResult<RSD, RSE, false>;
+	private request<RSD, RSE, RQ extends TDataShape, O extends sdk.Options<RQ, false>> (fn: (options: O) => RequestResult<RSD, RSE, false>, options?: O & GlobalpingRequestOptions): RequestResult<RSD, RSE, false>;
 	private request <RSD, RSE, RQ extends TDataShape, O extends sdk.Options<RQ, false>> (fn: (options: O) => RequestResult<RSD, RSE, false>, options?: O & GlobalpingRequestOptions): RequestResult<RSD, RSE, false> {
 		const optionsWithDefaults = {
 			auth: this.auth,

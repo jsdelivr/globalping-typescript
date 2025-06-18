@@ -85,4 +85,4 @@ export type KnownResponseTypes = { [k: number]: object };
 export type ResponseTypes = KnownResponseTypes | unknown;
 
 export type Awaitable<T> = T | PromiseLike<T>;
-export type Coalesce<T, D> = T extends undefined ? D : T
+export type Coalesce<T, D> = T extends undefined ? D : T;

@@ -30,18 +30,18 @@ export const IpVersion = {
 
 export type MeasurementPingOptions = {
 
-    /**
+	/**
      * The number of packets to send.
      */
-    packets?: number;
-    protocol?: PingProtocol;
+	packets?: number;
+	protocol?: PingProtocol;
 
-    /**
+	/**
      * The destination port for the packets. Applies only for the `TCP` protocol.
      *
      */
-    port?: number;
-    ipVersion?: IpVersion;
+	port?: number;
+	ipVersion?: IpVersion;
 };
 
 /**
@@ -59,14 +59,14 @@ export const TracerouteProtocol = {
 } as const;
 
 export type MeasurementTracerouteOptions = {
-    protocol?: TracerouteProtocol;
+	protocol?: TracerouteProtocol;
 
-    /**
+	/**
      * The destination port for the packets. Applies only for the `TCP` protocol.
      *
      */
-    port?: number;
-    ipVersion?: IpVersion;
+	port?: number;
+	ipVersion?: IpVersion;
 };
 
 /**
@@ -116,26 +116,26 @@ export const DnsProtocol = {
 
 export type MeasurementDnsOptions = {
 
-    /**
+	/**
      * The DNS query properties.
      */
-    query?: {
-        type?: DnsQueryType;
-    };
-    resolver?: MeasurementResolver;
-    protocol?: DnsProtocol;
+	query?: {
+		type?: DnsQueryType;
+	};
+	resolver?: MeasurementResolver;
+	protocol?: DnsProtocol;
 
-    /**
+	/**
      * The port number to send the query to.
      */
-    port?: number;
-    ipVersion?: IpVersion;
+	port?: number;
+	ipVersion?: IpVersion;
 
-    /**
+	/**
      * Toggles tracing of the delegation path from the root servers down to the target domain name.
      *
      */
-    trace?: boolean;
+	trace?: boolean;
 };
 
 /**
@@ -153,19 +153,19 @@ export const MtrProtocol = {
 } as const;
 
 export type MeasurementMtrOptions = {
-    protocol?: MtrProtocol;
+	protocol?: MtrProtocol;
 
-    /**
+	/**
      * The destination port for the packets. Applies only for the `TCP` and `UDP` protocols.
      *
      */
-    port?: number;
-    ipVersion?: IpVersion;
+	port?: number;
+	ipVersion?: IpVersion;
 
-    /**
+	/**
      * The number of packets to send to each hop.
      */
-    packets?: number;
+	packets?: number;
 };
 
 /**
@@ -192,44 +192,44 @@ export const HttpProtocol = {
 
 export type MeasurementHttpOptions = {
 
-    /**
+	/**
      * The HTTP request properties.
      */
-    request?: {
+	request?: {
 
-        /**
+		/**
          * An optional override for the `Host` header. The default value is based on the `target`.
          *
          */
-        host?: string;
+		host?: string;
 
-        /**
+		/**
          * The path portion of the URL.
          */
-        path?: string;
+		path?: string;
 
-        /**
+		/**
          * The query string portion of the URL.
          */
-        query?: string;
-        method?: HttpRequestMethod;
+		query?: string;
+		method?: HttpRequestMethod;
 
-        /**
+		/**
          * Additional request headers. Note that the `Host` and `User-Agent` are reserved and internally overridden.
          *
          */
-        headers?: {
-            [key: string]: string;
-        };
-    };
-    resolver?: MeasurementResolver;
+		headers?: {
+			[key: string]: string;
+		};
+	};
+	resolver?: MeasurementResolver;
 
-    /**
+	/**
      * The port number to use.
      */
-    port?: number;
-    protocol?: HttpProtocol;
-    ipVersion?: IpVersion;
+	port?: number;
+	protocol?: HttpProtocol;
+	ipVersion?: IpVersion;
 };
 
 export type MeasurementOptionsConditions = unknown;
@@ -345,31 +345,31 @@ export type NetworkName = string;
 export type Tags = Array<string>;
 
 export type MeasurementLocationOption = {
-    continent?: ContinentCode;
-    region?: RegionName;
-    country?: CountryCode;
-    state?: StateCode;
-    city?: CityName;
-    asn?: AsnCode;
-    network?: NetworkName;
-    tags?: Tags;
+	continent?: ContinentCode;
+	region?: RegionName;
+	country?: CountryCode;
+	state?: StateCode;
+	city?: CityName;
+	asn?: AsnCode;
+	network?: NetworkName;
+	tags?: Tags;
 
-    /**
+	/**
      * Locations defined in a single string instead of the respective location properties.
      * The API performs fuzzy matching on the `country`, `city`, `state`, `continent`, `region`, `asn` (using `AS` prefix, e.g., `AS123`), `tags`, and `network` values.
      * Supports full names, ISO codes (where applicable), and common aliases.
      * Multiple conditions can be combined using the `+` character, which behaves like a logical `AND`.
      *
      */
-    magic?: string;
+	magic?: string;
 
-    /**
+	/**
      * The maximum number of probes that should run the measurement in this location.
      * The result count might be lower if there aren't enough probes available in this location.
      * Mutually exclusive with the global `limit` property.
      *
      */
-    limit?: number;
+	limit?: number;
 };
 
 export type MeasurementLocations = Array<MeasurementLocationOption> | string;
@@ -388,19 +388,19 @@ export type MeasurementLimit = number;
 export type MeasurementOptions = MeasurementPingOptions | MeasurementTracerouteOptions | MeasurementDnsOptions | MeasurementMtrOptions | MeasurementHttpOptions;
 
 export type MeasurementRequest = MeasurementOptionsConditions & {
-    type: MeasurementType;
-    target: MeasurementTarget;
+	type: MeasurementType;
+	target: MeasurementTarget;
 
-    /**
+	/**
      * Indicates whether you want to get partial results while the measurement is still running:
      * - If `true`, partial results are returned as soon as they are available, and you can present them to the user in real time. Note that only the first 5 tests from the `results` array will update in real time.
      * - If `false`, the result of each test is updated only after the test finishes.
      *
      */
-    inProgressUpdates?: boolean;
-    locations?: MeasurementLocations;
-    limit?: MeasurementLimit;
-    measurementOptions?: MeasurementOptions;
+	inProgressUpdates?: boolean;
+	locations?: MeasurementLocations;
+	limit?: MeasurementLimit;
+	measurementOptions?: MeasurementOptions;
 };
 
 /**
@@ -415,13 +415,13 @@ export type MeasurementProbesCount = number;
  */
 export type CreateMeasurementResponse = {
 
-    /**
+	/**
      * The measurement ID.
      * > **Tip**: You can use the ID to create a new measurement request, reusing the same probes.
      *
      */
-    id: string;
-    probesCount: MeasurementProbesCount;
+	id: string;
+	probesCount: MeasurementProbesCount;
 };
 
 /**
@@ -439,8 +439,8 @@ export type FinishedTestStatus = BaseTestStatus & 'finished';
 export type TestRawOutput = string;
 
 export type BaseFinishedTestResult = {
-    status: FinishedTestStatus;
-    rawOutput: TestRawOutput;
+	status: FinishedTestStatus;
+	rawOutput: TestRawOutput;
 };
 
 /**
@@ -492,67 +492,67 @@ export type TimingPacketRtt = number;
 export type TimingPacketTtl = number;
 
 export type IcmpPingTiming = {
-    rtt: TimingPacketRtt;
-    ttl: TimingPacketTtl;
+	rtt: TimingPacketRtt;
+	ttl: TimingPacketTtl;
 };
 
 export type TcpPingTiming = {
-    rtt: TimingPacketRtt;
+	rtt: TimingPacketRtt;
 };
 
 /**
  * Represents a `finished` ping test.
  */
 export type FinishedPingTestResult = BaseFinishedTestResult & {
-    resolvedAddress: ResolvedAddress;
-    resolvedHostname: ResolvedHostname;
+	resolvedAddress: ResolvedAddress;
+	resolvedHostname: ResolvedHostname;
 
-    /**
+	/**
      * Summary `rtt` and packet loss statistics.
      * All times are in milliseconds.
      *
      */
-    stats: {
-        min: StatsRttMinNullable;
-        avg: StatsRttAvgNullable;
-        max: StatsRttMaxNullable;
-        total: StatsPacketsTotal;
-        rcv: StatsPacketsRcv;
-        drop: StatsPacketsDrop;
-        loss: StatsPacketsLoss;
-    };
+	stats: {
+		min: StatsRttMinNullable;
+		avg: StatsRttAvgNullable;
+		max: StatsRttMaxNullable;
+		total: StatsPacketsTotal;
+		rcv: StatsPacketsRcv;
+		drop: StatsPacketsDrop;
+		loss: StatsPacketsLoss;
+	};
 
-    /**
+	/**
      * An array containing details for each packet.
      * All times are in milliseconds.
      *
      */
-    timings: Array<IcmpPingTiming | TcpPingTiming>;
+	timings: Array<IcmpPingTiming | TcpPingTiming>;
 };
 
 /**
  * Represents a `finished` traceroute test.
  */
 export type FinishedTracerouteTestResult = BaseFinishedTestResult & {
-    resolvedAddress: ResolvedAddress;
-    resolvedHostname: ResolvedHostname;
+	resolvedAddress: ResolvedAddress;
+	resolvedHostname: ResolvedHostname;
 
-    /**
+	/**
      * An array containing details about each hop.
      */
-    hops: Array<{
-        resolvedAddress: ResolvedAddress;
-        resolvedHostname: ResolvedHostname;
+	hops: Array<{
+		resolvedAddress: ResolvedAddress;
+		resolvedHostname: ResolvedHostname;
 
-        /**
+		/**
          * An array containing details for each packet.
          * All times are in milliseconds.
          *
          */
-        timings: Array<{
-            rtt: TimingPacketRtt;
-        }>;
-    }>;
+		timings: Array<{
+			rtt: TimingPacketRtt;
+		}>;
+	}>;
 };
 
 /**
@@ -567,64 +567,64 @@ export type DnsStatusCodeName = string;
 
 export type DnsTestAnswer = {
 
-    /**
+	/**
      * The record domain name.
      */
-    name: string;
+	name: string;
 
-    /**
+	/**
      * The record type.
      */
-    type: string;
+	type: string;
 
-    /**
+	/**
      * The record time-to-live value in seconds.
      */
-    ttl: number;
+	ttl: number;
 
-    /**
+	/**
      * The record class.
      */
-    class: string;
+	class: string;
 
-    /**
+	/**
      * The record value.
      */
-    value: string;
+	value: string;
 };
 
 export type DnsTestHopResult = {
 
-    /**
+	/**
      * The hostname or IP of the resolver that answered the query.
      */
-    resolver: string;
+	resolver: string;
 
-    /**
+	/**
      * An array of the received resource records.
      */
-    answers: Array<DnsTestAnswer>;
+	answers: Array<DnsTestAnswer>;
 
-    /**
+	/**
      * Details about the query times.
      * All times are in milliseconds.
      *
      */
-    timings: {
+	timings: {
 
-        /**
+		/**
          * The total query time.
          */
-        total: number;
-    };
+		total: number;
+	};
 };
 
 /**
  * Represents a `finished` DNS test with `trace` disabled.
  */
 export type FinishedSimpleDnsTestResult = BaseFinishedTestResult & {
-    statusCode: DnsStatusCode;
-    statusCodeName: DnsStatusCodeName;
+	statusCode: DnsStatusCode;
+	statusCodeName: DnsStatusCodeName;
 } & DnsTestHopResult;
 
 /**
@@ -632,10 +632,10 @@ export type FinishedSimpleDnsTestResult = BaseFinishedTestResult & {
  */
 export type FinishedTraceDnsTestResult = BaseFinishedTestResult & {
 
-    /**
+	/**
      * An array containing details about each hop.
      */
-    hops: Array<DnsTestHopResult>;
+	hops: Array<DnsTestHopResult>;
 };
 
 export type FinishedDnsTestResult = FinishedSimpleDnsTestResult | FinishedTraceDnsTestResult;
@@ -679,49 +679,49 @@ export type StatsJitterMax = number;
  * Represents a `finished` MTR test.
  */
 export type FinishedMtrTestResult = BaseFinishedTestResult & {
-    resolvedAddress: ResolvedAddress;
-    resolvedHostname: ResolvedHostname;
+	resolvedAddress: ResolvedAddress;
+	resolvedHostname: ResolvedHostname;
 
-    /**
+	/**
      * An array containing details about each hop.
      */
-    hops: Array<{
-        resolvedAddress: ResolvedAddress & unknown;
-        resolvedHostname: ResolvedHostname & unknown;
+	hops: Array<{
+		resolvedAddress: ResolvedAddress & unknown;
+		resolvedHostname: ResolvedHostname & unknown;
 
-        /**
+		/**
          * An array containing the ASNs assigned to this hop.
          */
-        asn: Array<number>;
+		asn: Array<number>;
 
-        /**
+		/**
          * Summary `rtt` and packet loss statistics.
          * All times are in milliseconds.
          *
          */
-        stats: {
-            min: StatsRttMin;
-            avg: StatsRttAvg;
-            max: StatsRttMax;
-            stDev: StatsStDev;
-            jMin: StatsJitterMin;
-            jAvg: StatsJitterAvg;
-            jMax: StatsJitterMax;
-            total: StatsPacketsTotal;
-            rcv: StatsPacketsRcv;
-            drop: StatsPacketsDrop;
-            loss: StatsPacketsLoss;
-        };
+		stats: {
+			min: StatsRttMin;
+			avg: StatsRttAvg;
+			max: StatsRttMax;
+			stDev: StatsStDev;
+			jMin: StatsJitterMin;
+			jAvg: StatsJitterAvg;
+			jMax: StatsJitterMax;
+			total: StatsPacketsTotal;
+			rcv: StatsPacketsRcv;
+			drop: StatsPacketsDrop;
+			loss: StatsPacketsLoss;
+		};
 
-        /**
+		/**
          * An array containing details for each packet.
          * All times are in milliseconds.
          *
          */
-        timings: Array<{
-            rtt: TimingPacketRtt;
-        }>;
-    }>;
+		timings: Array<{
+			rtt: TimingPacketRtt;
+		}>;
+	}>;
 };
 
 /**
@@ -753,15 +753,15 @@ export type TimingHttpDownloadNullable = NullableInteger & unknown;
  */
 export type TlsCertificateSubject = {
 
-    /**
+	/**
      * The subject's common name.
      */
-    CN?: string;
+	CN?: string;
 
-    /**
+	/**
      * The subject's alternative names.
      */
-    alt?: string;
+	alt?: string;
 };
 
 /**
@@ -769,20 +769,20 @@ export type TlsCertificateSubject = {
  */
 export type TlsCertificateIssuer = {
 
-    /**
+	/**
      * The issuer's country.
      */
-    C?: string;
+	C?: string;
 
-    /**
+	/**
      * The issuer's organization.
      */
-    O?: string;
+	O?: string;
 
-    /**
+	/**
      * The issuer's common name.
      */
-    CN?: string;
+	CN?: string;
 };
 
 /**
@@ -801,65 +801,65 @@ export const TlsKeyType = {
 
 export type TlsCertificate = {
 
-    /**
+	/**
      * The negotiated SSL/TLS protocol version.
      *
      */
-    protocol: string;
+	protocol: string;
 
-    /**
+	/**
      * The OpenSSL name of the cipher suite.
      *
      */
-    cipherName: string;
+	cipherName: string;
 
-    /**
+	/**
      * Indicates whether a trusted authority signed the certificate.
      *
      */
-    authorized: boolean;
+	authorized: boolean;
 
-    /**
+	/**
      * The reason for rejecting the certificate if `authorized` is `false`.
      *
      */
-    error?: string;
+	error?: string;
 
-    /**
+	/**
      * The creation date and time of the certificate.
      */
-    createdAt: string;
+	createdAt: string;
 
-    /**
+	/**
      * The expiration date and time of the certificate.
      */
-    expiresAt: string;
-    subject: TlsCertificateSubject;
-    issuer: TlsCertificateIssuer;
-    keyType: TlsKeyType;
+	expiresAt: string;
+	subject: TlsCertificateSubject;
+	issuer: TlsCertificateIssuer;
+	keyType: TlsKeyType;
 
-    /**
+	/**
      * The size of the used key, or `null` for unrecognized types.
      */
-    keyBits: number | null;
+	keyBits: number | null;
 
-    /**
+	/**
      * The certificate serial number as a : separated HEX string.
      *
      */
-    serialNumber: string;
+	serialNumber: string;
 
-    /**
+	/**
      * The SHA-256 digest of the DER-encoded certificate as a : separated HEX string.
      *
      */
-    fingerprint256: string;
+	fingerprint256: string;
 
-    /**
+	/**
      * The public key as a : separated HEX string, or `null` for unrecognized types.
      *
      */
-    publicKey: string | null;
+	publicKey: string | null;
 };
 
 /**
@@ -867,52 +867,52 @@ export type TlsCertificate = {
  */
 export type FinishedHttpTestResult = BaseFinishedTestResult & {
 
-    /**
+	/**
      * The raw HTTP response headers.
      */
-    rawHeaders: string;
+	rawHeaders: string;
 
-    /**
+	/**
      * The raw HTTP response body or `null` if there was no body in response.
      * Note that only the first 10 kb are returned.
      *
      */
-    rawBody: string | null;
+	rawBody: string | null;
 
-    /**
+	/**
      * Indicates whether the `rawBody` value was truncated due to being too big.
      *
      */
-    truncated: boolean;
+	truncated: boolean;
 
-    /**
+	/**
      * The HTTP response headers. The value may be an array of strings for headers with multiple values, e.g., `Set-Cookie`.
      */
-    headers: {
-        [key: string]: string | Array<string>;
-    };
-    statusCode: HttpStatusCode;
-    statusCodeName: HttpStatusCodeName;
-    resolvedAddress: ResolvedAddress;
+	headers: {
+		[key: string]: string | Array<string>;
+	};
+	statusCode: HttpStatusCode;
+	statusCodeName: HttpStatusCodeName;
+	resolvedAddress: ResolvedAddress;
 
-    /**
+	/**
      * Details about the HTTP request times.
      * All times are in milliseconds.
      *
      */
-    timings: {
-        total: TimingHttpTotalNullable;
-        dns: TimingHttpDnsNullable;
-        tcp: TimingHttpTcpNullable;
-        tls: TimingHttpTlsNullable;
-        firstByte: TimingHttpFirstByteNullable;
-        download: TimingHttpDownloadNullable;
-    };
+	timings: {
+		total: TimingHttpTotalNullable;
+		dns: TimingHttpDnsNullable;
+		tcp: TimingHttpTcpNullable;
+		tls: TimingHttpTlsNullable;
+		firstByte: TimingHttpFirstByteNullable;
+		download: TimingHttpDownloadNullable;
+	};
 
-    /**
+	/**
      * Information about the TLS certificate or `null` if no TLS certificate is available.
      */
-    tls: TlsCertificate | null;
+	tls: TlsCertificate | null;
 };
 
 export type MeasurementResultsConditions = unknown;
@@ -944,15 +944,15 @@ export type Longitude = number;
  * The probe location information.
  */
 export type ProbeLocation = {
-    continent: ContinentCode;
-    region: RegionName;
-    country: CountryCode;
-    state: StateCode;
-    city: CityName;
-    asn: AsnCode;
-    network: NetworkName;
-    latitude: Latitude;
-    longitude: Longitude;
+	continent: ContinentCode;
+	region: RegionName;
+	country: CountryCode;
+	state: StateCode;
+	city: CityName;
+	asn: AsnCode;
+	network: NetworkName;
+	latitude: Latitude;
+	longitude: Longitude;
 };
 
 export type ProbeResolver = string | 'private';
@@ -969,8 +969,8 @@ export type InProgressTestStatus = BaseTestStatus & 'in-progress';
  *
  */
 export type InProgressTestResult = {
-    status: InProgressTestStatus;
-    rawOutput: TestRawOutput;
+	status: InProgressTestStatus;
+	rawOutput: TestRawOutput;
 };
 
 export type FailedTestStatus = BaseTestStatus & 'failed';
@@ -980,8 +980,8 @@ export type FailedTestStatus = BaseTestStatus & 'failed';
  *
  */
 export type FailedTestResult = {
-    status: FailedTestStatus;
-    rawOutput: TestRawOutput;
+	status: FailedTestStatus;
+	rawOutput: TestRawOutput;
 };
 
 export type OfflineTestStatus = BaseTestStatus & 'offline';
@@ -992,65 +992,65 @@ export type OfflineTestStatus = BaseTestStatus & 'offline';
  *
  */
 export type OfflineTestResult = {
-    status: OfflineTestStatus;
-    rawOutput: TestRawOutput;
+	status: OfflineTestStatus;
+	rawOutput: TestRawOutput;
 };
 
 export type TestResult = InProgressTestResult | FailedTestResult | OfflineTestResult | FinishedPingTestResult | FinishedTracerouteTestResult | FinishedDnsTestResult | FinishedMtrTestResult | FinishedHttpTestResult;
 
 export type MeasurementResultItem = {
-    probe: ProbeLocation & {
-        tags: Tags;
-        resolvers: ProbeResolvers;
-    };
-    result: TestResult;
+	probe: ProbeLocation & {
+		tags: Tags;
+		resolvers: ProbeResolvers;
+	};
+	result: TestResult;
 };
 
 export type MeasurementResponse = {
 
-    /**
+	/**
      * The measurement ID.
      */
-    id: string;
-    type: MeasurementType;
-    target: MeasurementTarget;
-    status: MeasurementStatus;
+	id: string;
+	type: MeasurementType;
+	target: MeasurementTarget;
+	status: MeasurementStatus;
 
-    /**
+	/**
      * The date and time when the measurement was created.
      */
-    createdAt: string;
+	createdAt: string;
 
-    /**
+	/**
      * The date and time when the measurement was last updated.
      */
-    updatedAt: string;
-    probesCount: MeasurementProbesCount;
+	updatedAt: string;
+	probesCount: MeasurementProbesCount;
 
-    /**
+	/**
      * The locations you specified when creating the measurement.
      * If you passed in an `id` of a previous measurement, the value will be filled in from that measurement.
      *
      */
-    locations?: Array<MeasurementLocationOption>;
-    limit?: MeasurementLimit & unknown;
-    measurementOptions?: MeasurementOptions & unknown;
+	locations?: Array<MeasurementLocationOption>;
+	limit?: MeasurementLimit & unknown;
+	measurementOptions?: MeasurementOptions & unknown;
 
-    /**
+	/**
      * An array containing the measurement results.
      */
-    results: Array<MeasurementResultItem>;
+	results: Array<MeasurementResultItem>;
 };
 
 export type Probe = {
 
-    /**
+	/**
      * The probe version.
      */
-    version: string;
-    location: ProbeLocation;
-    tags: Tags;
-    resolvers: ProbeResolvers;
+	version: string;
+	location: ProbeLocation;
+	tags: Tags;
+	resolvers: ProbeResolvers;
 };
 
 export type Probes = Array<Probe>;
@@ -1069,49 +1069,49 @@ export const RateLimitType = {
 } as const;
 
 export type RateLimitDetails = {
-    type: RateLimitType;
+	type: RateLimitType;
 
-    /**
+	/**
      * The number of rate limit points available in a given time window.
      */
-    limit: number;
+	limit: number;
 
-    /**
+	/**
      * The number of rate limit points remaining in the current time window.
      */
-    remaining: number;
+	remaining: number;
 
-    /**
+	/**
      * The number of seconds until the limit resets.
      */
-    reset: number;
+	reset: number;
 };
 
 export type Limits = {
 
-    /**
+	/**
      * Object containing rate limits information.
      */
-    rateLimit: {
+	rateLimit: {
 
-        /**
+		/**
          * Measurements rate limits.
          */
-        measurements: {
-            create: RateLimitDetails & unknown;
-        };
-    };
+		measurements: {
+			create: RateLimitDetails & unknown;
+		};
+	};
 
-    /**
+	/**
      * Object containing credits information (only for authenticated requests).
      */
-    credits?: {
+	credits?: {
 
-        /**
+		/**
          * The number of user's remaining credits.
          */
-        remaining?: number;
-    };
+		remaining?: number;
+	};
 };
 
 /**
@@ -1121,174 +1121,174 @@ export type MeasurementId = string;
 
 export type CreateMeasurementData = {
 
-    /**
+	/**
      * Use the request body to set the measurement parameters.
      */
-    body?: MeasurementRequest;
-    path?: never;
-    query?: never;
-    url: '/v1/measurements';
+	body?: MeasurementRequest;
+	path?: never;
+	query?: never;
+	url: '/v1/measurements';
 };
 
 export type CreateMeasurementErrors = {
 
-    /**
+	/**
      * If the API couldn't process the request due to malformed parameters or other client errors, it returns status `400 Bad Request`
      * and a body with more information about the error. Please modify your request before trying again.
      *
      */
-    400: {
+	400: {
 
-        /**
+		/**
          * Information about the error.
          */
-        error: {
+		error: {
 
-            /**
+			/**
              * The type of the error.
              */
-            type: string;
+			type: string;
 
-            /**
+			/**
              * A human-readable description of the error.
              */
-            message: string;
+			message: string;
 
-            /**
+			/**
              * Additional information that might be present if the error is related to a specific parameter or payload field.
              */
-            params?: {
-                [key: string]: string;
-            };
-        };
-    };
+			params?: {
+				[key: string]: string;
+			};
+		};
+	};
 
-    /**
+	/**
      * If the API couldn't find suitable probes for your request, it returns status `422 Unprocessable Content` and a body with more
      * information about the error. Please modify your request before trying again.
      *
      */
-    422: {
-        error: {
-            type: string;
-            message: string;
-        };
-    };
+	422: {
+		error: {
+			type: string;
+			message: string;
+		};
+	};
 
-    /**
+	/**
      * If you've exceeded the API rate limit, you'll receive status `429 Too Many Requests` and a body containing more information about the error.
      *
      */
-    429: {
-        error: {
-            type: string;
-            message: string;
-        };
-    };
+	429: {
+		error: {
+			type: string;
+			message: string;
+		};
+	};
 };
 
 export type CreateMeasurementError = CreateMeasurementErrors[keyof CreateMeasurementErrors];
 
 export type CreateMeasurementResponses = {
 
-    /**
+	/**
      * If the API accepted the request for processing, it returns status `202 Accepted` and a body containing the ID of the newly created measurement.
      * You can use the URL from the `Location` header to retrieve the measurement status.
      *
      */
-    202: CreateMeasurementResponse;
+	202: CreateMeasurementResponse;
 };
 
 export type CreateMeasurementResponse2 = CreateMeasurementResponses[keyof CreateMeasurementResponses];
 
 export type GetMeasurementData = {
-    body?: never;
-    path: {
+	body?: never;
+	path: {
 
-        /**
+		/**
          * The ID of the measurement you want to retrieve.
          */
-        id: string;
-    };
-    query?: never;
-    url: '/v1/measurements/{id}';
+		id: string;
+	};
+	query?: never;
+	url: '/v1/measurements/{id}';
 };
 
 export type GetMeasurementErrors = {
 
-    /**
+	/**
      * If the API couldn't find the requested resource, it returns status `404 Not Found`
      * and a body containing more information about the error.
      *
      */
-    404: {
-        error: {
-            type: string;
-            message: string;
-        };
-    };
+	404: {
+		error: {
+			type: string;
+			message: string;
+		};
+	};
 
-    /**
+	/**
      * If you've exceeded the API rate limit, you'll receive status `429 Too Many Requests` and a body containing more information about the error.
      *
      */
-    429: {
-        error: {
-            type: string;
-            message: string;
-        };
-    };
+	429: {
+		error: {
+			type: string;
+			message: string;
+		};
+	};
 };
 
 export type GetMeasurementError = GetMeasurementErrors[keyof GetMeasurementErrors];
 
 export type GetMeasurementResponses = {
 
-    /**
+	/**
      * A successful request returns status `200 OK` and a body containing the requested measurement results.
      *
      */
-    200: MeasurementOptionsConditions & MeasurementResponse;
+	200: MeasurementOptionsConditions & MeasurementResponse;
 };
 
 export type GetMeasurementResponse = GetMeasurementResponses[keyof GetMeasurementResponses];
 
 export type ListProbesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/probes';
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/v1/probes';
 };
 
 export type ListProbesResponses = {
 
-    /**
+	/**
      * A successful request returns status `200 OK` and a body containing a list of all probes currently online and their metadata.
      *
      */
-    200: Probes;
+	200: Probes;
 };
 
 export type ListProbesResponse = ListProbesResponses[keyof ListProbesResponses];
 
 export type GetLimitsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/limits';
+	body?: never;
+	path?: never;
+	query?: never;
+	url: '/v1/limits';
 };
 
 export type GetLimitsResponses = {
 
-    /**
+	/**
      * A successful request returns status `200 OK` and a body containing information about the current rate limits and user credits.
      *
      */
-    200: Limits;
+	200: Limits;
 };
 
 export type GetLimitsResponse = GetLimitsResponses[keyof GetLimitsResponses];
 
 export type ClientOptions = {
-    baseUrl: 'https://api.globalping.io' | (string & {});
+	baseUrl: 'https://api.globalping.io' | (string & {});
 };
