@@ -409,8 +409,8 @@ export type MeasurementLimit = number;
 /**
  * Additional optional fields depending on the measurement `type`.
  */
-export type MeasurementOptions =
-	MeasurementPingOptions | MeasurementTracerouteOptions | MeasurementDnsOptions | MeasurementMtrOptions | MeasurementHttpOptions;
+export type MeasurementOptions
+	= MeasurementPingOptions | MeasurementTracerouteOptions | MeasurementDnsOptions | MeasurementMtrOptions | MeasurementHttpOptions;
 
 export type MeasurementRequest = MeasurementOptionsConditions & {
 	type: MeasurementType;
@@ -1046,8 +1046,8 @@ export type OfflineTestResult = {
 	rawOutput: TestRawOutput;
 };
 
-export type TestResult =
-	| InProgressTestResult
+export type TestResult
+	= | InProgressTestResult
 	| FailedTestResult
 	| OfflineTestResult
 	| FinishedPingTestResult

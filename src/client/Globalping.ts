@@ -46,8 +46,8 @@ export class Globalping<ThrowApiErrors extends boolean> {
 
 		this.client = createClient(createConfig<ClientOptions>({
 			baseUrl: 'https://api.globalping.io',
-			fetch: (input: RequestInfo | URL, init?: RequestInit) => {
-				const request = new Request(input, init);
+			fetch: (...args: Parameters<typeof fetch>) => {
+				const request = new Request(...args);
 				const headers = new Headers(request.headers);
 				headers.set('User-Agent', this.userAgent);
 

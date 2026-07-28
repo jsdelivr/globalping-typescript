@@ -3,6 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert';
 import module from 'node:module';
 import { after, before, describe, it } from 'node:test';
+
 const require = module.createRequire(import.meta.url);
 
 describe('dist', () => {

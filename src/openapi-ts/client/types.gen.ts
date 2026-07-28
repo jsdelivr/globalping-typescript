@@ -157,8 +157,8 @@ type SseFn = <
 ) => Promise<ServerSentEventsResult<TData>>;
 
 type RequestFn = <TData = unknown, TError = unknown, ThrowOnError extends boolean = false, TResponseStyle extends ResponseStyle = 'fields'>(
-	options: Omit<RequestOptions<TData, TResponseStyle, ThrowOnError>, 'method'> &
-		Pick<Required<RequestOptions<TData, TResponseStyle, ThrowOnError>>, 'method'>,
+	options: Omit<RequestOptions<TData, TResponseStyle, ThrowOnError>, 'method'>
+		& Pick<Required<RequestOptions<TData, TResponseStyle, ThrowOnError>>, 'method'>,
 ) => RequestResult<TData, TError, ThrowOnError, TResponseStyle>;
 
 type BuildUrlFn = <
@@ -203,5 +203,5 @@ export type Options<
 	ThrowOnError extends boolean = boolean,
 	TResponse = unknown,
 	TResponseStyle extends ResponseStyle = 'fields',
-> = OmitKeys<RequestOptions<TResponse, TResponseStyle, ThrowOnError>, 'body' | 'path' | 'query' | 'url'> &
-	([TData] extends [never] ? unknown : Omit<TData, 'url'>);
+> = OmitKeys<RequestOptions<TResponse, TResponseStyle, ThrowOnError>, 'body' | 'path' | 'query' | 'url'>
+	& ([TData] extends [never] ? unknown : Omit<TData, 'url'>);

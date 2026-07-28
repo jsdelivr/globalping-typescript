@@ -2,8 +2,8 @@ import { JSDOM } from 'jsdom';
 import { assert } from 'chai';
 import fetchMock from 'fetch-mock';
 import { Globalping, ApiError } from '../../../src/index.js';
-import { TypedMeasurementRequest } from '../../../src/types.js';
-import { CreateMeasurementError, MeasurementStatus } from '../../../src/openapi-ts/index.js';
+import type { TypedMeasurementRequest } from '../../../src/types.js';
+import { type CreateMeasurementError, MeasurementStatus } from '../../../src/openapi-ts/index.js';
 
 describe('Globalping', () => {
 	before(() => {

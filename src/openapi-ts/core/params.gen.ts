@@ -3,8 +3,8 @@
 
 type Slot = 'body' | 'headers' | 'path' | 'query';
 
-export type Field =
-	| {
+export type Field
+	= | {
 		in: Exclude<Slot, 'body'>;
 
 		/**

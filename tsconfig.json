@@ -10,6 +10,9 @@
 		"target": "ES2019",
 		"moduleResolution": "NodeNext",
 		"resolveJsonModule": true,
+		"types": [
+			"node"
+		],
 		"sourceMap": true,
 		"noPropertyAccessFromIndexSignature": false,
 		"plugins": [
