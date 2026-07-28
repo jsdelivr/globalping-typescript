@@ -6,6 +6,7 @@ export * from './errors/HttpError.js';
 // Export JS enums.
 export {
 	IpVersion,
+	PingProtocol,
 	TracerouteProtocol,
 	DnsQueryType,
 	DnsProtocol,
