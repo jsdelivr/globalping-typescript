@@ -391,6 +391,23 @@ describe('Globalping', () => {
 				assert.ok(result.ok);
 				assert.ok(resultHasExpectedStatus);
 			});
+
+			it('should preserve response parsing errors', async () => {
+				fetchMock.get('/v1/limits', {
+					status: 200,
+					body: '{',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				try {
+					await globalping.getLimits();
+					assert.fail('Expected an error to be thrown.');
+				} catch (error) {
+					assert.instanceOf(error, SyntaxError);
+				}
+			});
 		});
 
 		describe('misc', () => {

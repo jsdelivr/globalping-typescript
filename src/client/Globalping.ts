@@ -1,4 +1,4 @@
-import { Client, createClient, createConfig, RequestResult, type TDataShape } from '@hey-api/client-fetch';
+import { type Client, type RequestResult, createClient, createConfig } from '../openapi-ts/client/index.js';
 
 // @transform-path ../../../package.json
 import pkg from '../../package.json' with { type: 'json' };
@@ -31,13 +31,6 @@ type GlobalpingOptions<ThrowOnKnownErrors> = {
 	timeout?: number;
 };
 
-type GlobalpingRequestOptions = {
-	auth?: string;
-	userAgent?: string;
-	signal?: AbortSignal;
-	timeout?: number;
-};
-
 export class Globalping<ThrowApiErrors extends boolean> {
 	private readonly auth: string | undefined;
 	private readonly client: Client;
@@ -53,6 +46,20 @@ export class Globalping<ThrowApiErrors extends boolean> {
 
 		this.client = createClient(createConfig<ClientOptions>({
 			baseUrl: 'https://api.globalping.io',
+			fetch: (input: RequestInfo | URL, init?: RequestInit) => {
+				const request = new Request(input, init);
+				const headers = new Headers(request.headers);
+				headers.set('User-Agent', this.userAgent);
+
+				if (this.auth) {
+					headers.set('Authorization', `Bearer ${this.auth}`);
+				}
+
+				return fetch(new Request(request, {
+					headers,
+					signal: AbortSignal.timeout(this.timeout),
+				}));
+			},
 		}));
 	}
 
@@ -60,14 +67,20 @@ export class Globalping<ThrowApiErrors extends boolean> {
 	 * @see {@link sdk.createMeasurement} for the API docs
 	 */
 	createMeasurement (measurement: TypedMeasurementRequest) {
-		return this.transformResult<CreateMeasurementResponses, CreateMeasurementErrors>(this.request(sdk.createMeasurement, { body: measurement }));
+		return this.transformResult<CreateMeasurementResponses, CreateMeasurementErrors>(sdk.createMeasurement({
+			body: measurement,
+			client: this.client,
+		}));
 	}
 
 	/**
 	 * @see {@link sdk.getMeasurement} for the API docs
 	 */
 	async getMeasurement (id: string) {
-		const result = await this.transformResult<TypedMeasurementResponses<MeasurementType>, GetMeasurementErrors>(this.request(sdk.getMeasurement, { path: { id } }));
+		const result = await this.transformResult<TypedMeasurementResponses<MeasurementType>, GetMeasurementErrors>(sdk.getMeasurement({
+			path: { id },
+			client: this.client,
+		}));
 
 		if (!result.ok) {
 			return result;
@@ -81,16 +94,17 @@ export class Globalping<ThrowApiErrors extends boolean> {
 	 */
 	async awaitMeasurement (id: string) {
 		const getMeasurement = (eTag?: string | null) => {
-			return this.request(sdk.getMeasurement, {
+			return sdk.getMeasurement({
 				path: { id },
 				headers: eTag ? {
 					'If-None-Match': eTag,
 				} : {},
+				client: this.client,
 			});
 		};
 
 		const start = Date.now();
-		let internalResult = await getMeasurement();
+		let internalResult = Globalping.requireRequestCompleted(await getMeasurement());
 
 		while (internalResult.data && internalResult.data.status === MeasurementStatus.IN_PROGRESS) {
 			if (Date.now() - start > 60000) {
@@ -98,7 +112,7 @@ export class Globalping<ThrowApiErrors extends boolean> {
 			}
 
 			await wait(500);
-			const newInternalResult = await getMeasurement(internalResult.response.headers.get('ETag'));
+			const newInternalResult = Globalping.requireRequestCompleted(await getMeasurement(internalResult.response.headers.get('ETag')));
 
 			if (newInternalResult.response.status !== 304) {
 				internalResult = newInternalResult;
@@ -121,49 +135,47 @@ export class Globalping<ThrowApiErrors extends boolean> {
 	 * @see {@link sdk.listProbes} for the API docs
 	 */
 	async listProbes () {
-		return this.transformResult<ListProbesResponses, NoResponseTypes>(this.request(sdk.listProbes));
+		return this.transformResult<ListProbesResponses, NoResponseTypes, unknown>(sdk.listProbes({
+			client: this.client,
+		}));
 	}
 
 	/**
 	 * @see {@link sdk.getLimits} for the API docs
 	 */
 	async getLimits () {
-		return this.transformResult<GetLimitsResponses, NoResponseTypes>(this.request(sdk.getLimits));
-	}
-
-	private request<RSD, RSE> (fn: () => RequestResult<RSD, RSE, false>): RequestResult<RSD, RSE, false>;
-	private request<RSD, RSE, RQ extends TDataShape, O extends sdk.Options<RQ, false>> (fn: (options: O) => RequestResult<RSD, RSE, false>, options?: O & GlobalpingRequestOptions): RequestResult<RSD, RSE, false>;
-	private request <RSD, RSE, RQ extends TDataShape, O extends sdk.Options<RQ, false>> (fn: (options: O) => RequestResult<RSD, RSE, false>, options?: O & GlobalpingRequestOptions): RequestResult<RSD, RSE, false> {
-		const optionsWithDefaults = {
-			auth: this.auth,
-			timeout: this.timeout,
-			userAgent: this.userAgent,
-			...(options || {}) as O,
-		};
-
-		return fn({
+		return this.transformResult<GetLimitsResponses, NoResponseTypes, unknown>(sdk.getLimits({
 			client: this.client,
-			fetch: (request: Request) => {
-				const headers = new Headers(request.headers);
-				headers.set('User-Agent', optionsWithDefaults.userAgent);
-
-				if (optionsWithDefaults.auth) {
-					headers.set('Authorization', `Bearer ${optionsWithDefaults.auth}`);
-				}
-
-				return fetch(new Request(request, {
-					headers,
-					signal: optionsWithDefaults.signal ?? AbortSignal.timeout(optionsWithDefaults.timeout),
-				}));
-			},
-			...optionsWithDefaults,
-		});
+		}));
 	}
 
-	private async transformResult <TData extends ResponseTypes, TError extends ResponseTypes> (requestResult: Awaitable<Awaited<RequestResult<TData[keyof TData], TError extends unknown ? unknown : TError[keyof TError], false>>>) {
-		const { data, error, request, response } = await requestResult;
+	private static requireRequestCompleted <T extends { error?: unknown; request?: Request; response?: Response }> (result: T): T & { request: Request; response: Response } {
+		if (!result.request || !result.response) {
+			if (result.error instanceof Error) {
+				throw result.error;
+			}
+
+			throw new Error('Request failed before receiving a response.');
+		}
+
+		return result as T & { request: Request; response: Response };
+	}
+
+	private async transformResult <TData extends ResponseTypes, TError extends ResponseTypes, TInternalError = TError> (requestResult: Awaitable<Awaited<RequestResult<TData, TInternalError, false>>>) {
+		const internalResult = Globalping.requireRequestCompleted(await requestResult);
+		const { data, error, request, response } = internalResult;
 
 		if (error != null) {
+			if (response.ok) {
+				if (error instanceof Error) {
+					throw error;
+				}
+
+				const responseError = new Error('Failed to process response.');
+				Object.defineProperty(responseError, 'cause', { value: error });
+				throw responseError;
+			}
+
 			if (typeof error !== 'object' || !('error' in error)) {
 				throw new HttpError(request, response);
 			}

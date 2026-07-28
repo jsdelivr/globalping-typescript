@@ -31,11 +31,8 @@
 	"bugs": {
 		"url": "https://github.com/jsdelivr/globalping-typescript/issues"
 	},
-	"dependencies": {
-		"@hey-api/client-fetch": "^0.10.0"
-	},
 	"devDependencies": {
-		"@hey-api/openapi-ts": "^0.67.2",
+		"@hey-api/openapi-ts": "0.99.0",
 		"@martin-kolarik/eslint-config": "^8.0.0",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^16.0.1",
@@ -50,6 +47,7 @@
 		"fetch-mock": "^12.5.3",
 		"jsdom": "^26.1.0",
 		"mocha": "~11.6.0",
+		"prettier": "^3.9.6",
 		"rollup": "^4.43.0",
 		"terser": "^5.43.0",
 		"ts-node": "^10.9.2",
@@ -57,16 +55,22 @@
 		"typescript": "^5.8.3",
 		"typescript-transform-paths": "^3.5.5"
 	},
+	"overrides": {
+		"js-yaml": "4.3.0"
+	},
 	"scripts": {
 		"build": "rm -rf dist && npm run build:esm && npm run build:umd",
 		"build:esm": "tspc --declaration",
 		"build:umd": "rollup -c && terser dist/umd/bundle.js -o dist/umd/bundle.min.js --source-map 'content=dist/umd/bundle.js.map,url=bundle.min.js.map'",
 		"lint": "eslint --cache .",
 		"lint:fix": "eslint --cache --fix .",
-		"openapi:generate": "openapi-ts && eslint src/openapi-ts --fix",
+		"openapi:generate": "openapi-ts && prettier --write src/openapi-ts && (eslint --no-ignore --fix src/openapi-ts > /dev/null || exit 0)",
 		"test:dist": "node test/dist.js",
 		"test:e2e": "TS_NODE_TRANSPILE_ONLY=true mocha --config .mocharc.e2e.cjs",
 		"test:integration": "TS_NODE_TRANSPILE_ONLY=true mocha",
 		"test": "npm run lint && npm run test:integration"
+	},
+	"engines": {
+		"node": ">=22.18.0"
 	}
 }
