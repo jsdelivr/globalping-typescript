@@ -43,7 +43,10 @@ const globalping = new Globalping(/* options */);
 Creates a new measurement with the set parameters. The measurement runs asynchronously, and you can retrieve its current state using `getMeasurement()` or wait for its final state using `awaitMeasurement()`.
 
 ```ts
-const result = await globalping.createMeasurement({ type: 'ping', target: 'example.com' });
+const result = await globalping.createMeasurement({
+    type: 'ping',
+    target: 'example.com',
+});
 
 if (!result.ok) {
     // See the Error handling section below.
