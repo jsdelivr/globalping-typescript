@@ -66,7 +66,7 @@ console.log(result); // => { data: { id: string, status: string, ... }, ... }
 
 ### Await a measurement
 
-Similar to `getMeasurement()`, but keeps pooling the API until the measurement is finished, and returns its final state.
+Similar to `getMeasurement()`, but keeps polling the API until the measurement is finished, and returns its final state.
 
 ```ts
 const result = await globalping.awaitMeasurement(id);
@@ -98,10 +98,10 @@ There are a few convenience methods for determining more specific response types
 #### `assertHttpStatus()` / `isHttpStatus()`
 
 ```ts
-const result = await globalping.createMeasurement(id);
+const result = await globalping.getMeasurement(id);
 
-if (Globalping.isHttpStatus(400, result)) {
-    // You can now access parameter validation error details.
+if (Globalping.isHttpStatus(404, result)) {
+    // You can now access not found error details.
 }
 ```
 
@@ -109,7 +109,11 @@ if (Globalping.isHttpStatus(400, result)) {
 
 ```ts
 const result = await globalping.awaitMeasurement(id);
-Globalping.assertMeasurementType('ping', result); // You can now access ping-specific properties on result.data
+
+if (result.ok) {
+    Globalping.assertMeasurementType('ping', result.data);
+    // You can now access ping-specific properties on result.data.
+}
 ```
 
 ### Error handling
@@ -121,7 +125,10 @@ The library offers two ways of handling errors.
 Known API errors, such as parameter validation errors, rate limit errors, etc., are not thrown as exceptions. This allows the library to return precise error types for each method, which means you can access all error details in a type-safe way. You need to check each `result` before accessing its data.
 
 ```ts
-const result = await globalping.createMeasurement();
+const result = await globalping.createMeasurement({
+    type: 'ping',
+    target: 'example.com',
+});
 
 // This is sufficient if you only care about success/failure.
 if (result.ok) {
@@ -145,7 +152,10 @@ All errors, including known API errors, are thrown as exceptions. You don't have
 import { ApiError, HttpError } from 'globalping';
 
 try {
-    const result = await globalping.createMeasurement();
+    const result = await globalping.createMeasurement({
+        type: 'ping',
+        target: 'example.com',
+    });
     console.log(result.data) // => { id: string, probesCount: number }
 } catch (e) {
     if (e instanceof ApiError) {
