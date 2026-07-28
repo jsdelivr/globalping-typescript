@@ -14,7 +14,7 @@
 	"type": "module",
 	"exports": {
 		"import": {
-			"types": "./dist/esm/index.d.ts",
+			"types": "./index.d.ts",
 			"default": "./dist/esm/index.js"
 		},
 		"require": {
@@ -24,8 +24,9 @@
 		"default": "./dist/umd/bundle.js"
 	},
 	"jsdelivr": "./dist/umd/bundle.min.js",
-	"types": "./dist/esm/index.d.ts",
+	"types": "./index.d.ts",
 	"files": [
+		"index.d.ts",
 		"dist",
 		"src"
 	],
@@ -54,6 +55,7 @@
 		"mocha": "^11.7.6",
 		"prettier": "^3.9.6",
 		"rollup": "^4.62.3",
+		"rollup-plugin-dts": "^6.4.1",
 		"terser": "^5.49.0",
 		"ts-node": "^10.9.2",
 		"ts-patch": "^4.0.1",
@@ -64,8 +66,7 @@
 		"js-yaml": "4.3.0"
 	},
 	"scripts": {
-		"build": "rm -rf dist && npm run build:esm && npm run build:cjs-types && npm run build:umd",
-		"build:cjs-types": "node scripts/build-cjs-types.js",
+		"build": "rm -rf dist && npm run build:esm && npm run build:umd",
 		"build:esm": "tspc --declaration",
 		"build:umd": "rollup -c && terser dist/umd/bundle.js -o dist/umd/bundle.min.js --source-map 'content=dist/umd/bundle.js.map,url=bundle.min.js.map'",
 		"lint": "eslint --cache .",
