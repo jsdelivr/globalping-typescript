@@ -14,7 +14,7 @@
 	"type": "module",
 	"exports": {
 		"import": {
-			"types": "./index.d.ts",
+			"types": "./dist/esm/index.d.ts",
 			"default": "./dist/esm/index.js"
 		},
 		"require": {
@@ -24,9 +24,8 @@
 		"default": "./dist/umd/bundle.js"
 	},
 	"jsdelivr": "./dist/umd/bundle.min.js",
-	"types": "./index.d.ts",
+	"types": "./dist/umd/bundle.d.ts",
 	"files": [
-		"index.d.ts",
 		"dist",
 		"src"
 	],

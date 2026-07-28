@@ -27,10 +27,17 @@ export default [
 	},
 	{
 		input: 'dist/esm/index.d.ts',
-		output: {
-			file: 'dist/cjs/bundle.d.cts',
-			format: 'es',
-		},
+		output: [
+			{
+				file: 'dist/cjs/bundle.d.cts',
+				format: 'es',
+			},
+			{
+				file: 'dist/umd/bundle.d.ts',
+				format: 'es',
+				banner: 'export as namespace globalping;',
+			},
+		],
 		plugins: [
 			dts(),
 		],
