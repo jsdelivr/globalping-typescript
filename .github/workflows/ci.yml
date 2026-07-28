@@ -30,6 +30,7 @@ jobs:
       - name: Test
         run: |
           npm test
+          npm run test:types
       - name: Test Dist
         run: |
           rm -rf node_modules
