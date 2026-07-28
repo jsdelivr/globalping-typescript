@@ -1,0 +1,5 @@
+{
+	"name": "globalping-cjs-consumer",
+	"private": true,
+	"type": "commonjs"
+}
