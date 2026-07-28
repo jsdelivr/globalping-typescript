@@ -13,13 +13,18 @@
 	],
 	"type": "module",
 	"exports": {
-		"types": "./dist/esm/index.d.ts",
-		"import": "./dist/esm/index.js",
-		"require": "./dist/cjs/bundle.cjs",
+		"import": {
+			"types": "./dist/esm/index.d.ts",
+			"default": "./dist/esm/index.js"
+		},
+		"require": {
+			"types": "./dist/cjs/bundle.d.cts",
+			"default": "./dist/cjs/bundle.cjs"
+		},
 		"default": "./dist/umd/bundle.js"
 	},
 	"jsdelivr": "./dist/umd/bundle.min.js",
-	"types": "./dist/esm/index.d.ts",
+	"types": "./dist/umd/bundle.d.ts",
 	"files": [
 		"dist",
 		"src"
@@ -49,6 +54,7 @@
 		"mocha": "^11.7.6",
 		"prettier": "^3.9.6",
 		"rollup": "^4.62.3",
+		"rollup-plugin-dts": "^6.4.1",
 		"terser": "^5.49.0",
 		"ts-node": "^10.9.2",
 		"ts-patch": "^4.0.1",
