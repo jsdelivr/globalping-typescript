@@ -6,6 +6,7 @@ import childProcess from 'node:child_process';
 import { after, before, describe, it } from 'node:test';
 
 const require = module.createRequire(import.meta.url);
+const typescriptCompiler = path.resolve(import.meta.dirname, '../node_modules/typescript/bin/tsc');
 
 describe('dist', () => {
 	before(() => {
@@ -38,9 +39,11 @@ describe('dist', () => {
 			assert.ok(globalping.createMeasurement);
 		});
 
-		it('provides CommonJS TypeScript declarations', () => {
+		it('provides CommonJS TypeScript declarations', {
+			skip: !fs.existsSync(typescriptCompiler),
+		}, () => {
 			const result = childProcess.spawnSync(process.execPath, [
-				path.resolve(import.meta.dirname, '../node_modules/typescript/bin/tsc'),
+				typescriptCompiler,
 				'--project',
 				path.resolve(import.meta.dirname, 'fixtures/cjs-consumer'),
 				'--listFiles',
