@@ -4,10 +4,10 @@
 		"rootDir": "./src",
 		"outDir": "./dist/esm",
 		"lib": [
-			"ES2019"
+			"ES2022"
 		],
 		"module": "NodeNext",
-		"target": "ES2019",
+		"target": "ES2022",
 		"moduleResolution": "NodeNext",
 		"resolveJsonModule": true,
 		"types": [
