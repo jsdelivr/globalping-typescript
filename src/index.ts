@@ -19,6 +19,7 @@ export {
 	TlsKeyType,
 	MeasurementStatus,
 	RateLimitType,
+	FailureSource,
 } from './openapi-ts/types.gen.js';
 
 // Export the relevant custom types.
@@ -53,6 +54,9 @@ export type {
 	FinishedDnsTestResult,
 	FinishedMtrTestResult,
 	FinishedHttpTestResult,
+	InProgressTestResult,
+	FailedTestResult,
+	OfflineTestResult,
 	ProbeLocation,
 	TestResult,
 	MeasurementResultItem,

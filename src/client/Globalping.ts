@@ -24,7 +24,7 @@ import {
 
 import { wait } from '../utils.js';
 
-type GlobalpingOptions<ThrowOnKnownErrors> = {
+export type GlobalpingOptions<ThrowOnKnownErrors> = {
 	auth?: string;
 	userAgent?: string;
 	throwApiErrors?: ThrowOnKnownErrors;
