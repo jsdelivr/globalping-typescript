@@ -1,0 +1,3 @@
+export {};
+
+new globalping.Globalping();

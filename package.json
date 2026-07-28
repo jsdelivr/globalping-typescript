@@ -13,14 +13,15 @@
 	],
 	"type": "module",
 	"exports": {
-		"types": "./dist/esm/index.d.ts",
+		"types": "./index.d.ts",
 		"import": "./dist/esm/index.js",
 		"require": "./dist/cjs/bundle.cjs",
 		"default": "./dist/umd/bundle.js"
 	},
 	"jsdelivr": "./dist/umd/bundle.min.js",
-	"types": "./dist/esm/index.d.ts",
+	"types": "./index.d.ts",
 	"files": [
+		"index.d.ts",
 		"dist",
 		"src"
 	],
