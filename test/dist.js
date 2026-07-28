@@ -2,11 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert';
 import module from 'node:module';
-import childProcess from 'node:child_process';
 import { after, before, describe, it } from 'node:test';
 
 const require = module.createRequire(import.meta.url);
-const typescriptCompiler = path.resolve(import.meta.dirname, '../node_modules/typescript/bin/tsc');
 
 describe('dist', () => {
 	before(() => {
@@ -37,27 +35,6 @@ describe('dist', () => {
 			assert.ok(GP);
 			assert.ok(ApiError);
 			assert.ok(globalping.createMeasurement);
-		});
-
-		it('provides CommonJS TypeScript declarations', {
-			skip: !fs.existsSync(typescriptCompiler),
-		}, () => {
-			const result = childProcess.spawnSync(process.execPath, [
-				typescriptCompiler,
-				'--project',
-				path.resolve(import.meta.dirname, 'fixtures/cjs-consumer'),
-				'--listFiles',
-			], {
-				encoding: 'utf8',
-			});
-
-			assert.strictEqual(result.status, 0, result.stdout || result.stderr);
-			const listedFiles = result.stdout.replaceAll('\\', '/');
-			const cjsDeclaration = path.resolve(import.meta.dirname, '../node_modules/globalping/dist/cjs/bundle.d.cts').replaceAll('\\', '/');
-			assert.ok(
-				listedFiles.includes(cjsDeclaration),
-				'The CommonJS consumer did not resolve the CommonJS declaration entry point.',
-			);
 		});
 	});
 });

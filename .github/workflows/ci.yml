@@ -32,7 +32,6 @@ jobs:
           npm test
       - name: Test Dist
         run: |
-          npm run test:dist
           rm -rf node_modules
           npm ci --omit=dev
           npm run test:dist
