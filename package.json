@@ -65,12 +65,12 @@
 		"js-yaml": "4.3.0"
 	},
 	"scripts": {
-		"build": "rm -rf dist && npm run build:esm && npm run build:umd",
+		"build": "rm -rf dist && npm run build:esm && npm run build:cjs-umd",
 		"build:esm": "tspc --declaration",
-		"build:umd": "rollup -c && terser dist/umd/bundle.js -o dist/umd/bundle.min.js --source-map 'content=dist/umd/bundle.js.map,url=bundle.min.js.map'",
+		"build:cjs-umd": "rollup -c && terser dist/umd/bundle.js -o dist/umd/bundle.min.js --source-map 'content=dist/umd/bundle.js.map,url=bundle.min.js.map'",
 		"lint": "eslint --cache .",
 		"lint:fix": "eslint --cache --fix .",
-		"openapi:generate": "openapi-ts && prettier --write src/openapi-ts && (eslint --no-ignore --fix src/openapi-ts > /dev/null || exit 0)",
+		"openapi:generate": "openapi-ts && prettier --config openapi-ts.prettier.config.js --write src/openapi-ts && (eslint --no-ignore --fix src/openapi-ts > /dev/null || exit 0)",
 		"test:dist": "node test/dist.js",
 		"test:e2e": "TS_NODE_TRANSPILE_ONLY=true mocha --config .mocharc.e2e.cjs",
 		"test:integration": "TS_NODE_TRANSPILE_ONLY=true mocha",
