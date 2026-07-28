@@ -425,6 +425,13 @@ export type MeasurementRequest = MeasurementOptionsConditions & {
 	inProgressUpdates?: boolean;
 	locations?: MeasurementLocations;
 	limit?: MeasurementLimit;
+
+	/**
+	 * The probe-side wall-clock timeout for each test, in seconds. If omitted, the value is calculated based on the provided measurement options and can be up to 20 seconds.
+	 * In all cases, callers should allow at least 10 additional seconds for probe-to-API communication and API measurement finalization before triggering a client-side timeout.
+	 *
+	 */
+	timeout?: number;
 	measurementOptions?: MeasurementOptions;
 };
 
@@ -1092,6 +1099,12 @@ export type MeasurementResponse = {
 	 */
 	locations?: Array<MeasurementLocationOption>;
 	limit?: MeasurementLimit & unknown;
+
+	/**
+	 * The probe-side wall-clock timeout for each test, in seconds, if different from the calculated value.
+	 *
+	 */
+	timeout?: number;
 	measurementOptions?: MeasurementOptions & unknown;
 
 	/**
