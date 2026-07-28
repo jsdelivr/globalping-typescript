@@ -2,8 +2,8 @@ import { JSDOM } from 'jsdom';
 import { assert } from 'chai';
 import fetchMock from 'fetch-mock';
 import { Globalping, ApiError } from '../../../src/index.js';
-import { TypedMeasurementRequest } from '../../../src/types.js';
-import { CreateMeasurementError, MeasurementStatus } from '../../../src/openapi-ts/index.js';
+import type { TypedMeasurementRequest } from '../../../src/types.js';
+import { type CreateMeasurementError, MeasurementStatus } from '../../../src/openapi-ts/index.js';
 
 describe('Globalping', () => {
 	before(() => {
@@ -390,6 +390,23 @@ describe('Globalping', () => {
 
 				assert.ok(result.ok);
 				assert.ok(resultHasExpectedStatus);
+			});
+
+			it('should preserve response parsing errors', async () => {
+				fetchMock.get('/v1/limits', {
+					status: 200,
+					body: '{',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				try {
+					await globalping.getLimits();
+					assert.fail('Expected an error to be thrown.');
+				} catch (error) {
+					assert.instanceOf(error, SyntaxError);
+				}
 			});
 		});
 

@@ -6,6 +6,7 @@ export default defineConfig([
 	typescript,
 	{
 		ignores: [
+			'src/openapi-ts/**/*',
 			'coverage/**/*',
 			'data/**/*',
 			'dist/**/*',
