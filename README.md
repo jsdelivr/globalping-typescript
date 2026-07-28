@@ -112,11 +112,7 @@ if (Globalping.isHttpStatus(400, result)) {
 
 ```ts
 const result = await globalping.awaitMeasurement(id);
-
-if (result.ok) {
-    Globalping.assertMeasurementType('ping', result.data);
-    // You can now access ping-specific properties on result.data.
-}
+Globalping.assertMeasurementType('ping', result.data); // You can now access ping-specific properties on result.data
 ```
 
 ### Error handling
@@ -152,12 +148,10 @@ Any unexpected errors, such as timeouts, networking errors, etc., are still thro
 All errors, including known API errors, are thrown as exceptions. You don't have to check `result.ok` before accessing the data, but the thrown errors only have generic types.
 
 ```ts
-import { ApiError, Globalping, HttpError } from 'globalping';
-
-const throwingGlobalping = new Globalping({ throwApiErrors: true });
+import { ApiError, HttpError } from 'globalping';
 
 try {
-    const result = await throwingGlobalping.createMeasurement({
+    const result = await globalping.createMeasurement({
         type: 'ping',
         target: 'example.com',
     });
