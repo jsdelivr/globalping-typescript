@@ -98,10 +98,13 @@ There are a few convenience methods for determining more specific response types
 #### `assertHttpStatus()` / `isHttpStatus()`
 
 ```ts
-const result = await globalping.getMeasurement(id);
+const result = await globalping.createMeasurement({
+    type: 'ping',
+    target: 'example.com',
+});
 
-if (Globalping.isHttpStatus(404, result)) {
-    // You can now access not found error details.
+if (Globalping.isHttpStatus(400, result)) {
+    // You can now access parameter validation error details.
 }
 ```
 
@@ -149,10 +152,12 @@ Any unexpected errors, such as timeouts, networking errors, etc., are still thro
 All errors, including known API errors, are thrown as exceptions. You don't have to check `result.ok` before accessing the data, but the thrown errors only have generic types.
 
 ```ts
-import { ApiError, HttpError } from 'globalping';
+import { ApiError, Globalping, HttpError } from 'globalping';
+
+const throwingGlobalping = new Globalping({ throwApiErrors: true });
 
 try {
-    const result = await globalping.createMeasurement({
+    const result = await throwingGlobalping.createMeasurement({
         type: 'ping',
         target: 'example.com',
     });
