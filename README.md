@@ -43,10 +43,7 @@ const globalping = new Globalping(/* options */);
 Creates a new measurement with the set parameters. The measurement runs asynchronously, and you can retrieve its current state using `getMeasurement()` or wait for its final state using `awaitMeasurement()`.
 
 ```ts
-const result = await globalping.createMeasurement({
-    type: 'ping',
-    target: 'example.com',
-});
+const result = await globalping.createMeasurement({ type: 'ping', target: 'example.com' });
 
 if (!result.ok) {
     // See the Error handling section below.
@@ -98,10 +95,7 @@ There are a few convenience methods for determining more specific response types
 #### `assertHttpStatus()` / `isHttpStatus()`
 
 ```ts
-const result = await globalping.createMeasurement({
-    type: 'ping',
-    target: 'example.com',
-});
+const result = await globalping.createMeasurement({ type: 'ping', target: 'example.com' });
 
 if (Globalping.isHttpStatus(400, result)) {
     // You can now access parameter validation error details.
@@ -124,10 +118,7 @@ The library offers two ways of handling errors.
 Known API errors, such as parameter validation errors, rate limit errors, etc., are not thrown as exceptions. This allows the library to return precise error types for each method, which means you can access all error details in a type-safe way. You need to check each `result` before accessing its data.
 
 ```ts
-const result = await globalping.createMeasurement({
-    type: 'ping',
-    target: 'example.com',
-});
+const result = await globalping.createMeasurement({ type: 'ping', target: 'example.com' });
 
 // This is sufficient if you only care about success/failure.
 if (result.ok) {
@@ -151,10 +142,7 @@ All errors, including known API errors, are thrown as exceptions. You don't have
 import { ApiError, HttpError } from 'globalping';
 
 try {
-    const result = await globalping.createMeasurement({
-        type: 'ping',
-        target: 'example.com',
-    });
+    const result = await globalping.createMeasurement({ type: 'ping', target: 'example.com' });
     console.log(result.data) // => { id: string, probesCount: number }
 } catch (e) {
     if (e instanceof ApiError) {
