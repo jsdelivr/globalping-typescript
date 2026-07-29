@@ -73,6 +73,12 @@ const result = await globalping.awaitMeasurement(id);
 console.log(result); // => { data: { id: string, status: 'finished', ... }, ... }
 ```
 
+An optional `signal` option can be used to abort the waiting at any time:
+
+```ts
+const result = await globalping.awaitMeasurement(id, { signal });
+```
+
 ### List probes
 
 Returns a list of all probes currently online and their metadata, such as location and assigned tags.
@@ -176,7 +182,7 @@ If `false` (default), known API errors are not thrown as exceptions. See the Err
 
 `timeout: number`
 
-A timeout in ms for every HTTP request made by the library. The default value is 30 seconds, and you shouldn't need to change this.
+A transport-level timeout in ms for every HTTP request made by the library. The default value is 30 seconds, and you shouldn't need to change this.
 
 ## Development
 Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

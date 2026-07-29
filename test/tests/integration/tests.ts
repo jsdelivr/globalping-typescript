@@ -403,6 +403,43 @@ describe('Globalping', () => {
 					Date.now = originalDateNow;
 				}
 			});
+
+			it('should abort while waiting before the next poll', async () => {
+				const abortController = new AbortController();
+				const abortReason = new Error('Stopped awaiting measurement.');
+				const inProgressResponse = {
+					status: 200,
+					body: {
+						id: '123',
+						type: 'ping',
+						target: 'example.com',
+						status: MeasurementStatus.IN_PROGRESS,
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						probesCount: 1,
+						results: [],
+					},
+				};
+
+				fetchMock
+					.getOnce('/v1/measurements/123', inProgressResponse)
+					.getOnce('/v1/measurements/123', {
+						...inProgressResponse,
+						body: {
+							...inProgressResponse.body,
+							status: MeasurementStatus.FINISHED,
+						},
+					});
+
+				setTimeout(() => abortController.abort(abortReason), 10);
+
+				try {
+					await globalping.awaitMeasurement('123', { signal: abortController.signal });
+					assert.fail('Expected an error to be thrown.');
+				} catch (error) {
+					assert.strictEqual(error, abortReason);
+				}
+			});
 		});
 
 		describe('listProbes', () => {
