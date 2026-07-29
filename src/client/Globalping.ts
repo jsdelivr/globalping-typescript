@@ -105,9 +105,10 @@ export class Globalping<ThrowApiErrors extends boolean> {
 
 		const start = Date.now();
 		let internalResult = Globalping.requireRequestCompleted(await getMeasurement());
+		const maxTime = internalResult.data?.timeout === undefined ? 35000 : (internalResult.data.timeout + 10) * 1000;
 
 		while (internalResult.data && internalResult.data.status === MeasurementStatus.IN_PROGRESS) {
-			if (Date.now() - start > 60000) {
+			if (Date.now() - start > maxTime) {
 				throw new Error(`Timed out waiting for measurement ${id} to finish.`);
 			}
 

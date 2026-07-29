@@ -324,6 +324,85 @@ describe('Globalping', () => {
 				assert.ok(result.ok);
 				assert.ok(resultHasExpectedStatus);
 			});
+
+			it('should time out after 35 seconds by default', async () => {
+				const originalDateNow = Date.now;
+				let requestCount = 0;
+				let now = 0;
+
+				Date.now = () => now;
+
+				fetchMock.get('/v1/measurements/123', () => {
+					requestCount++;
+
+					now = requestCount === 1 ? 35000 : 35001;
+
+					return {
+						status: 200,
+						body: {
+							id: '123',
+							type: 'ping',
+							target: 'example.com',
+							status: MeasurementStatus.IN_PROGRESS,
+							createdAt: new Date().toISOString(),
+							updatedAt: new Date().toISOString(),
+							probesCount: 1,
+							results: [],
+						},
+					};
+				});
+
+				try {
+					await globalping.awaitMeasurement('123');
+					assert.fail('Expected an error to be thrown.');
+				} catch (error) {
+					assert.instanceOf(error, Error);
+					assert.equal(error.message, 'Timed out waiting for measurement 123 to finish.');
+					assert.equal(requestCount, 2);
+				} finally {
+					Date.now = originalDateNow;
+				}
+			});
+
+			it('should add 10 seconds to the timeout from the first response', async () => {
+				const originalDateNow = Date.now;
+				let requestCount = 0;
+				let now = 0;
+
+				Date.now = () => now;
+
+				fetchMock.get('/v1/measurements/123', () => {
+					requestCount++;
+
+					now = requestCount === 1 ? 15001 : 60001;
+
+					return {
+						status: 200,
+						body: {
+							id: '123',
+							type: 'ping',
+							target: 'example.com',
+							status: MeasurementStatus.IN_PROGRESS,
+							createdAt: new Date().toISOString(),
+							updatedAt: new Date().toISOString(),
+							probesCount: 1,
+							results: [],
+							timeout: 5,
+						},
+					};
+				});
+
+				try {
+					await globalping.awaitMeasurement('123');
+					assert.fail('Expected an error to be thrown.');
+				} catch (error) {
+					assert.instanceOf(error, Error);
+					assert.equal(error.message, 'Timed out waiting for measurement 123 to finish.');
+					assert.equal(requestCount, 1);
+				} finally {
+					Date.now = originalDateNow;
+				}
+			});
 		});
 
 		describe('listProbes', () => {
