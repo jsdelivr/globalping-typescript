@@ -31,6 +31,10 @@ export type GlobalpingOptions<ThrowOnKnownErrors> = {
 	timeout?: number;
 };
 
+export type AwaitMeasurementOptions = {
+	signal?: AbortSignal;
+};
+
 export class Globalping<ThrowApiErrors extends boolean = false> {
 	private readonly auth: string | undefined;
 	private readonly client: Client;
@@ -57,7 +61,7 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 
 				return fetch(new Request(request, {
 					headers,
-					signal: AbortSignal.timeout(this.timeout),
+					signal: AbortSignal.any([ request.signal, AbortSignal.timeout(this.timeout) ]),
 				}));
 			},
 		}));
@@ -92,13 +96,14 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 	/**
 	 * @see {@link sdk.getMeasurement} for the API docs
 	 */
-	async awaitMeasurement (id: string) {
+	async awaitMeasurement (id: string, { signal }: AwaitMeasurementOptions = {}) {
 		const getMeasurement = (eTag?: string | null) => {
 			return sdk.getMeasurement({
 				path: { id },
 				headers: eTag ? {
 					'If-None-Match': eTag,
 				} : {},
+				...signal ? { signal } : {},
 				client: this.client,
 			});
 		};
@@ -112,7 +117,7 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 				throw new Error(`Timed out waiting for measurement ${id} to finish.`);
 			}
 
-			await wait(500);
+			await wait(500, signal);
 			const newInternalResult = Globalping.requireRequestCompleted(await getMeasurement(internalResult.response.headers.get('ETag')));
 
 			if (newInternalResult.response.status !== 304) {
@@ -152,7 +157,7 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 
 	private static requireRequestCompleted <T extends { error?: unknown; request?: Request; response?: Response }> (result: T): T & { request: Request; response: Response } {
 		if (!result.request || !result.response) {
-			if (result.error instanceof Error) {
+			if ('error' in result) {
 				throw result.error;
 			}
 
