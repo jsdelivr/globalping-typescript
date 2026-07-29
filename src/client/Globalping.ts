@@ -157,7 +157,7 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 
 	private static requireRequestCompleted <T extends { error?: unknown; request?: Request; response?: Response }> (result: T): T & { request: Request; response: Response } {
 		if (!result.request || !result.response) {
-			if (result.error instanceof Error) {
+			if ('error' in result) {
 				throw result.error;
 			}
 

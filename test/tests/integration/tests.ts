@@ -440,6 +440,21 @@ describe('Globalping', () => {
 					assert.strictEqual(error, abortReason);
 				}
 			});
+
+			it('should preserve non-Error request failures', async () => {
+				const requestError = { message: 'Request failed.' };
+
+				fetchMock.get('/v1/measurements/123', () => {
+					throw requestError;
+				});
+
+				try {
+					await globalping.awaitMeasurement('123');
+					assert.fail('Expected an error to be thrown.');
+				} catch (error) {
+					assert.strictEqual(error, requestError);
+				}
+			});
 		});
 
 		describe('listProbes', () => {
