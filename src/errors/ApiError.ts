@@ -7,5 +7,6 @@ export class ApiError<T> extends HttpError {
 		public readonly data: T,
 	) {
 		super(request, response);
+		this.name = 'ApiError';
 	}
 }

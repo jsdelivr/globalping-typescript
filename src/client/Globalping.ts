@@ -31,7 +31,7 @@ export type GlobalpingOptions<ThrowOnKnownErrors> = {
 	timeout?: number;
 };
 
-export class Globalping<ThrowApiErrors extends boolean> {
+export class Globalping<ThrowApiErrors extends boolean = false> {
 	private readonly auth: string | undefined;
 	private readonly client: Client;
 	private readonly userAgent: string;
