@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import { Globalping } from '../../../src/index.js';
-import { TypedMeasurementRequest } from '../../../src/types.js';
+import type { TypedMeasurementRequest } from '../../../src/types.js';
 
 describe('Globalping', () => {
 	const globalping = new Globalping({ throwApiErrors: false });
