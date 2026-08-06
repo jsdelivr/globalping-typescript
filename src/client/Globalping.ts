@@ -36,7 +36,6 @@ export type AwaitMeasurementOptions = {
 };
 
 export class Globalping<ThrowApiErrors extends boolean = false> {
-	private readonly auth: string | undefined;
 	private readonly client: Client;
 	private readonly userAgent: string;
 	private readonly throwApiErrors: ThrowApiErrors;
@@ -46,18 +45,14 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 		this.userAgent = userAgent ?? `globalping-typescript/${pkg.version} (https://github.com/jsdelivr/globalping-typescript)`;
 		this.throwApiErrors = throwApiErrors ?? false as ThrowApiErrors;
 		this.timeout = timeout ?? 30000;
-		this.auth = auth;
 
 		this.client = createClient(createConfig<ClientOptions>({
+			auth,
 			baseUrl: 'https://api.globalping.io',
 			fetch: (...args: Parameters<typeof fetch>) => {
 				const request = new Request(...args);
 				const headers = new Headers(request.headers);
 				headers.set('User-Agent', this.userAgent);
-
-				if (this.auth) {
-					headers.set('Authorization', `Bearer ${this.auth}`);
-				}
 
 				return fetch(new Request(request, {
 					headers,

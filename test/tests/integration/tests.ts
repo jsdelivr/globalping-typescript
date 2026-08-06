@@ -577,19 +577,70 @@ describe('Globalping', () => {
 				assert.equal(result3.data.at(0)?.version, '3.0.0');
 			});
 
-			it('should send the configured auth token', async () => {
-				const mockResponse = {
+			it('should only send the configured auth token to authenticated operations', async () => {
+				const measurementResponse = {
 					status: 200,
-					body: [{
-						version: '1.0.0',
-					}],
+					body: {
+						id: '123',
+						type: 'ping',
+						target: 'example.com',
+						status: MeasurementStatus.FINISHED,
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						probesCount: 1,
+						results: [],
+					},
 				} as const;
 
-				fetchMock.get(({ request }) => request?.headers?.get('Authorization') === 'Bearer xx', mockResponse);
+				fetchMock
+					.post('/v1/measurements', {
+						status: 202,
+						body: {
+							id: '123',
+							probesCount: 1,
+						},
+					})
+					.get('/v1/measurements/123', measurementResponse, { repeat: 2 })
+					.get('/v1/probes', {
+						status: 200,
+						body: [],
+					})
+					.get('/v1/limits', {
+						status: 200,
+						body: {
+							rateLimit: {
+								measurements: {
+									create: {
+										type: 'user',
+										limit: 100,
+										remaining: 95,
+										reset: 3599,
+									},
+								},
+							},
+						},
+					});
 
-				const result = await new Globalping({ auth: 'xx' }).listProbes();
+				const authenticatedGlobalping = new Globalping({ auth: 'xx' });
+				await authenticatedGlobalping.createMeasurement({ type: 'ping', target: 'example.com' });
+				await authenticatedGlobalping.getMeasurement('123');
+				await authenticatedGlobalping.awaitMeasurement('123');
+				await authenticatedGlobalping.listProbes();
+				await authenticatedGlobalping.getLimits();
 
-				assert.equal(result.data.at(0)?.version, '1.0.0');
+				const requests = fetchMock.callHistory.calls().map(({ request }) => ({
+					method: request?.method,
+					path: request === undefined ? undefined : new URL(request.url).pathname,
+					authorization: request?.headers.get('Authorization'),
+				}));
+
+				assert.deepEqual(requests, [
+					{ method: 'POST', path: '/v1/measurements', authorization: 'Bearer xx' },
+					{ method: 'GET', path: '/v1/measurements/123', authorization: null },
+					{ method: 'GET', path: '/v1/measurements/123', authorization: null },
+					{ method: 'GET', path: '/v1/probes', authorization: null },
+					{ method: 'GET', path: '/v1/limits', authorization: 'Bearer xx' },
+				]);
 			});
 
 			it('should respect the configured timeout', async () => {
