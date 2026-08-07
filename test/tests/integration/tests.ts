@@ -325,7 +325,7 @@ describe('Globalping', () => {
 				assert.ok(resultHasExpectedStatus);
 			});
 
-			it('should time out after 35 seconds by default', async () => {
+			it('should time out after 45 seconds by default', async () => {
 				const originalDateNow = Date.now;
 				let requestCount = 0;
 				let now = 0;
@@ -335,7 +335,7 @@ describe('Globalping', () => {
 				fetchMock.get('/v1/measurements/123', () => {
 					requestCount++;
 
-					now = requestCount === 1 ? 35000 : 35001;
+					now = requestCount === 1 ? 45000 : 45001;
 
 					return {
 						status: 200,
