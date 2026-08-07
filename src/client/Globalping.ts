@@ -105,7 +105,7 @@ export class Globalping<ThrowApiErrors extends boolean = false> {
 
 		const start = Date.now();
 		let internalResult = Globalping.requireRequestCompleted(await getMeasurement());
-		const maxTime = internalResult.data?.timeout === undefined ? 35000 : (internalResult.data.timeout + 10) * 1000;
+		const maxTime = internalResult.data?.timeout === undefined ? 45000 : (internalResult.data.timeout + 10) * 1000;
 
 		while (internalResult.data && internalResult.data.status === MeasurementStatus.IN_PROGRESS) {
 			if (Date.now() - start > maxTime) {
